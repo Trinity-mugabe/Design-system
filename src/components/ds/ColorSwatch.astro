@@ -2,46 +2,74 @@
 interface Props {
   name: string;
   token: string;
+  role: string;
+  value: string;
   light?: boolean;
   class?: string;
 }
 
-const { name, token, light = false, class: className = "" } = Astro.props;
+const { name, token, role, value, light = false, class: className = "" } = Astro.props;
 
 const classes = ["ds-swatch", light ? "ds-swatch--light" : "", className]
   .filter(Boolean)
   .join(" ");
 ---
 
-<div class={classes}>
+<article class={classes}>
   <div class="ds-swatch__chip" style={`background: var(${token})`}></div>
   <div class="ds-swatch__meta">
-    <span class="ds-swatch__name">{name}</span>
+    <div class="ds-swatch__top">
+      <span class="ds-swatch__name">{name}</span>
+      <span class="ds-swatch__role">{role}</span>
+    </div>
+    <code class="ds-swatch__value">{value}</code>
     <span class="ds-swatch__token">{token}</span>
+    <button
+      type="button"
+      class="ds-swatch__copy"
+      data-copy={`${token}: ${value}`}
+      aria-label={`Copy ${name} token`}
+    >
+      Copy token
+    </button>
   </div>
-</div>
+</article>
 
 <style>
   .ds-swatch {
     display: flex;
     flex-direction: column;
-    gap: var(--space-sm);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-md);
+    gap: 0;
+    border: 1px solid color-mix(in oklch, var(--color-line) 70%, transparent);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    background-color: var(--color-bg);
+    background-color: var(--color-surface);
+    transition:
+      border-color var(--duration-normal) var(--ease-smooth),
+      transform var(--duration-fast) var(--ease-spring);
+  }
+
+  .ds-swatch:hover {
+    border-color: color-mix(in oklch, var(--color-primary) 30%, var(--color-line));
   }
 
   .ds-swatch__chip {
-    height: 4rem;
+    height: 4.5rem;
     width: 100%;
   }
 
   .ds-swatch__meta {
     display: flex;
     flex-direction: column;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-md) var(--space-md);
+    border-top: 1px solid color-mix(in oklch, var(--color-line) 50%, transparent);
+  }
+
+  .ds-swatch__top {
+    display: flex;
+    flex-direction: column;
     gap: 0.125rem;
-    padding: var(--space-xs) var(--space-sm) var(--space-sm);
   }
 
   .ds-swatch__name {
@@ -51,10 +79,53 @@ const classes = ["ds-swatch", light ? "ds-swatch--light" : "", className]
     color: var(--color-ink);
   }
 
+  .ds-swatch__role {
+    font-size: var(--text-caption);
+    color: var(--color-muted);
+    line-height: 1.35;
+  }
+
+  .ds-swatch__value {
+    font-family: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
+    font-size: 0.75rem;
+    color: var(--color-ink);
+    background: color-mix(in oklch, var(--color-bg) 70%, var(--color-surface));
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 0.2em 0.4em;
+    word-break: break-all;
+  }
+
   .ds-swatch__token {
     font-family: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
     font-size: 0.75rem;
     color: var(--color-muted);
-    word-break: break-all;
+  }
+
+  .ds-swatch__copy {
+    align-self: flex-start;
+    margin-top: var(--space-xs);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    font-weight: 500;
+    color: var(--color-primary-ink);
+    background: transparent;
+    border: 1px solid color-mix(in oklch, var(--color-primary) 35%, var(--color-line));
+    border-radius: var(--radius-sm);
+    padding: 0.35em 0.65em;
+    min-height: 2.25rem;
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast) var(--ease-smooth),
+      border-color var(--duration-fast) var(--ease-smooth);
+  }
+
+  .ds-swatch__copy:hover {
+    background: color-mix(in oklch, var(--color-primary) 8%, transparent);
+  }
+
+  .ds-swatch__copy.is-copied {
+    color: var(--color-green-ink);
+    border-color: color-mix(in oklch, var(--color-green) 40%, var(--color-line));
   }
 </style>

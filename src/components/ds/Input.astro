@@ -50,6 +50,7 @@ const wrapperClasses = ["ds-input-wrap", className].filter(Boolean).join(" ");
     flex-direction: column;
     gap: var(--space-xs);
     font-family: var(--font-body);
+    width: 100%;
   }
 
   .ds-input__label {
@@ -62,14 +63,15 @@ const wrapperClasses = ["ds-input-wrap", className].filter(Boolean).join(" ");
     font-family: var(--font-body);
     font-size: var(--text-body);
     color: var(--color-ink);
-    background-color: var(--color-bg);
-    border: 1px solid var(--color-line);
+    background-color: var(--color-surface);
+    border: 1px solid color-mix(in oklch, var(--color-line) 80%, transparent);
     border-radius: var(--radius-md);
     padding: var(--space-sm) var(--space-md);
     width: 100%;
     transition:
-      border-color var(--duration-fast) var(--ease-out-quart),
-      box-shadow var(--duration-fast) var(--ease-out-quart);
+      border-color var(--duration-normal) var(--ease-smooth),
+      box-shadow var(--duration-normal) var(--ease-smooth),
+      background-color var(--duration-normal) var(--ease-smooth);
   }
 
   .ds-input__field::placeholder {
@@ -77,13 +79,14 @@ const wrapperClasses = ["ds-input-wrap", className].filter(Boolean).join(" ");
   }
 
   .ds-input__field:hover {
-    border-color: var(--color-muted);
+    border-color: color-mix(in oklch, var(--color-primary) 25%, var(--color-line));
   }
 
   .ds-input__field:focus {
     outline: none;
     border-color: var(--color-focus);
-    box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-focus) 25%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-focus) 18%, transparent);
+    background: var(--color-surface);
   }
 
   .ds-input__field[aria-invalid="true"] {
@@ -91,7 +94,7 @@ const wrapperClasses = ["ds-input-wrap", className].filter(Boolean).join(" ");
   }
 
   .ds-input__field[aria-invalid="true"]:focus {
-    box-shadow: 0 0 0 2px color-mix(in oklch, var(--color-error) 20%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-error) 15%, transparent);
   }
 
   .ds-input__helper {

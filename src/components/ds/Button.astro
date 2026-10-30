@@ -55,10 +55,16 @@ const Tag = href ? "a" : "button";
     border-radius: var(--radius-md);
     cursor: pointer;
     transition:
-      background-color var(--duration-fast) var(--ease-out-quart),
-      border-color var(--duration-fast) var(--ease-out-quart),
-      color var(--duration-fast) var(--ease-out-quart);
+      background-color var(--duration-normal) var(--ease-smooth),
+      border-color var(--duration-normal) var(--ease-smooth),
+      color var(--duration-normal) var(--ease-smooth),
+      box-shadow var(--duration-normal) var(--ease-smooth),
+      transform var(--duration-fast) var(--ease-spring);
     white-space: nowrap;
+  }
+
+  .ds-btn:active:not(:disabled) {
+    transform: scale(0.97);
   }
 
   .ds-btn:disabled,
@@ -68,51 +74,55 @@ const Tag = href ? "a" : "button";
     pointer-events: none;
   }
 
-  /* Sizes */
   .ds-btn--sm {
     font-size: var(--text-caption);
+    min-height: 2.5rem;
     padding: var(--space-xs) var(--space-sm);
   }
 
   .ds-btn--md {
     font-size: var(--text-secondary);
+    min-height: 2.75rem;
     padding: var(--space-sm) var(--space-md);
   }
 
   .ds-btn--lg {
     font-size: var(--text-body);
-    padding: var(--space-md) var(--space-lg);
+    min-height: 2.75rem;
+    padding: 0.75rem var(--space-lg);
   }
 
-  /* Variants */
   .ds-btn--primary {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
-    color: var(--color-bg);
+    color: var(--color-on-primary);
+    box-shadow: 0 1px 2px color-mix(in oklch, var(--color-ink) 12%, transparent);
   }
 
   .ds-btn--primary:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
     border-color: var(--color-primary-hover);
+    box-shadow: 0 2px 6px color-mix(in oklch, var(--color-ink) 14%, transparent);
   }
 
   .ds-btn--secondary {
     background-color: var(--color-surface);
-    border-color: var(--color-line);
+    border-color: color-mix(in oklch, var(--color-line) 80%, transparent);
     color: var(--color-ink);
   }
 
   .ds-btn--secondary:hover:not(:disabled) {
-    background-color: var(--color-line);
+    background: color-mix(in oklch, var(--color-primary) 8%, var(--color-surface));
+    border-color: color-mix(in oklch, var(--color-primary) 30%, var(--color-line));
   }
 
   .ds-btn--ghost {
     background-color: transparent;
     border-color: transparent;
-    color: var(--color-primary);
+    color: var(--color-primary-ink);
   }
 
   .ds-btn--ghost:hover:not(:disabled) {
-    background-color: var(--color-surface);
+    background-color: color-mix(in oklch, var(--color-primary) 8%, transparent);
   }
 </style>

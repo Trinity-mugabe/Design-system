@@ -4,9 +4,23 @@ import "../styles/global.css";
 interface Props {
   title: string;
   description?: string;
+  activeNav?: string;
 }
 
-const { title, description = "A neutral, token-driven design system showcase." } = Astro.props;
+const {
+  title,
+  description = "Quiet Poet — a calm, cool design system with poetic drenched color.",
+  activeNav = "",
+} = Astro.props;
+
+const navItems = [
+  { id: "overview", label: "Overview", href: "#overview" },
+  { id: "colors", label: "Colors", href: "#colors" },
+  { id: "type", label: "Typography", href: "#type" },
+  { id: "components", label: "Components", href: "#components" },
+  { id: "get-started", label: "Get started", href: "#get-started" },
+  { id: "agents", label: "For agents", href: "#agents" },
+];
 ---
 
 <!doctype html>
@@ -16,9 +30,163 @@ const { title, description = "A neutral, token-driven design system showcase." }
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <title>{title}</title>
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
   </head>
-  <body>
-    <slot />
+  <body class="app">
+    <div class="app-bg" aria-hidden="true"></div>
+
+    <div class="app-frame">
+      <aside class="sidebar" id="sidebar" aria-label="Site navigation">
+        <div class="sidebar__brand">
+          <div class="sidebar__mark">
+            <div class="sidebar__logo" aria-hidden="true"></div>
+            <span class="sidebar__wordmark">Quiet Poet</span>
+          </div>
+          <p class="sidebar__tagline">Calm canvas. Drenched color. Scandinavian warmth.</p>
+        </div>
+
+        <nav class="sidebar__nav">
+          <span class="sidebar__nav-label">On this page</span>
+          {
+            navItems.map((item) => (
+              <a
+                href={item.href}
+                class:list={["sidebar__link", { "is-active": activeNav === item.id }]}
+                data-nav={item.id}
+              >
+                <span class="sidebar__link-dot" aria-hidden="true"></span>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+
+        <div class="sidebar__footer">
+          <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+            <span id="theme-icon" aria-hidden="true">◐</span>
+            <span id="theme-label">Theme</span>
+          </button>
+          <p class="sidebar__meta">Tokens live in <code>src/styles/global.css</code>.</p>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <header class="mobile-bar">
+          <button type="button" class="menu-btn" id="menu-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <path d="M2 4.5h14M2 9h14M2 13.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <span class="mobile-bar__title">Quiet Poet</span>
+          <button type="button" class="menu-btn" id="theme-toggle-mobile" aria-label="Toggle color theme">
+            <span aria-hidden="true">◐</span>
+          </button>
+        </header>
+
+        <slot />
+
+        <footer class="page-footer">
+          <p>Quiet Poet design system — cool neutrals, poetic color, curated not cluttered.</p>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      const root = document.documentElement;
+      const sidebar = document.getElementById("sidebar");
+      const menuBtn = document.getElementById("menu-btn");
+      const themeToggle = document.getElementById("theme-toggle");
+      const themeToggleMobile = document.getElementById("theme-toggle-mobile");
+      const themeLabel = document.getElementById("theme-label");
+
+      function getTheme() {
+        return root.getAttribute("data-theme") === "dark" ? "dark" : "light";
+      }
+
+      function setTheme(theme) {
+        root.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        if (themeLabel) {
+          themeLabel.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+        }
+      }
+
+      function toggleTheme() {
+        setTheme(getTheme() === "dark" ? "light" : "dark");
+      }
+
+      function closeSidebar() {
+        sidebar?.classList.remove("is-open");
+        menuBtn?.setAttribute("aria-expanded", "false");
+      }
+
+      function openSidebar() {
+        sidebar?.classList.add("is-open");
+        menuBtn?.setAttribute("aria-expanded", "true");
+      }
+
+      themeToggle?.addEventListener("click", toggleTheme);
+      themeToggleMobile?.addEventListener("click", toggleTheme);
+
+      menuBtn?.addEventListener("click", () => {
+        if (sidebar?.classList.contains("is-open")) {
+          closeSidebar();
+        } else {
+          openSidebar();
+        }
+      });
+
+      sidebar?.querySelectorAll(".sidebar__link").forEach((link) => {
+        link.addEventListener("click", () => {
+          if (window.matchMedia("(max-width: 768px)").matches) {
+            closeSidebar();
+          }
+        });
+      });
+
+      document.addEventListener("click", (e) => {
+        if (
+          sidebar?.classList.contains("is-open") &&
+          !sidebar.contains(e.target) &&
+          !menuBtn?.contains(e.target)
+        ) {
+          closeSidebar();
+        }
+      });
+
+      const sections = ["overview", "colors", "type", "components", "get-started", "agents"];
+      const navLinks = document.querySelectorAll(".sidebar__link[data-nav]");
+
+      function updateActiveNav() {
+        let current = sections[0];
+        for (const id of sections) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top <= 120) {
+            current = id;
+          }
+        }
+        navLinks.forEach((link) => {
+          link.classList.toggle("is-active", link.getAttribute("data-nav") === current);
+        });
+      }
+
+      window.addEventListener("scroll", updateActiveNav, { passive: true });
+      updateActiveNav();
+      setTheme(getTheme());
+    </script>
   </body>
 </html>

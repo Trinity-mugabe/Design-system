@@ -3,6 +3,8 @@
 
 # Summer Vibes: Create Your Design System Using Cursor
 
+> **Quiet Poet fork** ([Trinity-mugabe/vibe-design-system](https://github.com/Trinity-mugabe/vibe-design-system)) — personal reskin of the DataCamp showcase: cool Scandinavian canvas, Onest typography, sidebar glass shell, matte backgrounds, and agent-readable endpoints (`tokens.json`, `system.md`, `llms.txt`). Upstream: [lucas-datacamp/vibe-design-system](https://github.com/lucas-datacamp/vibe-design-system).
+
 Foundation repo for the **Summer Vibes** live coding session at [DataCamp](https://www.datacamp.com/).
 
 Clone this before the session starts, open it in Cursor, and follow along as we build a design system from scratch. You do not need to know Astro beforehand. The repo is pre-scaffolded so we can spend the session on taste, systems, and iteration, not boilerplate.

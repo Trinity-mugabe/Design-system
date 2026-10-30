@@ -6,254 +6,278 @@ import Badge from "../components/ds/Badge.astro";
 import Input from "../components/ds/Input.astro";
 import ColorSwatch from "../components/ds/ColorSwatch.astro";
 import Section from "../components/ds/Section.astro";
+import AgentEndpoint from "../components/ds/AgentEndpoint.astro";
 
-const swatches = [
-  { name: "Background",     token: "--color-bg" },
-  { name: "Surface",        token: "--color-surface" },
-  { name: "Ink",            token: "--color-ink" },
-  { name: "Muted",          token: "--color-muted" },
-  { name: "Line",           token: "--color-line" },
-  { name: "Primary",        token: "--color-primary" },
-  { name: "Accent",         token: "--color-accent" },
-  { name: "Coral",          token: "--color-coral" },
-  { name: "Green",          token: "--color-green" },
+const agentEndpoints = [
+  {
+    href: "/tokens.json",
+    file: "tokens.json",
+    description: "Flat JSON of every CSS variable. Drop straight into agent context.",
+  },
+  {
+    href: "/system.md",
+    file: "system.md",
+    description: "Markdown reference with token tables, component props, and usage rules.",
+  },
+  {
+    href: "/llms.txt",
+    file: "llms.txt",
+    description: "Plain-text summary in the llms.txt convention for LLM context windows.",
+  },
+];
+
+const swatchGroups = [
+  {
+    title: "Neutrals",
+    items: [
+      { name: "Background", token: "--color-bg", role: "Page canvas", value: "oklch(0.975 0.008 240)" },
+      { name: "Surface", token: "--color-surface", role: "Cards and panels", value: "oklch(0.995 0.004 240)" },
+      { name: "Ink", token: "--color-ink", role: "Primary text", value: "oklch(0.28 0.025 250)" },
+      { name: "Muted", token: "--color-muted", role: "Secondary text", value: "oklch(0.52 0.02 250)" },
+      { name: "Line", token: "--color-line", role: "Borders and dividers", value: "oklch(0.91 0.012 240)" },
+    ],
+  },
+  {
+    title: "Brand",
+    items: [
+      { name: "Primary", token: "--color-primary", role: "Actions and links", value: "oklch(0.52 0.14 200)", light: true },
+      { name: "Accent", token: "--color-accent", role: "Golden highlights", value: "oklch(0.78 0.14 75)" },
+    ],
+  },
+  {
+    title: "Signals",
+    items: [
+      { name: "Green", token: "--color-green", role: "Success and meadow", value: "oklch(0.58 0.1 145)", light: true },
+      { name: "Coral", token: "--color-coral", role: "Warm emphasis", value: "oklch(0.68 0.12 45)" },
+    ],
+  },
 ];
 
 const typeRows = [
-  { label: "Display",    cls: "text-display",    tag: "span", sample: "The quick brown fox" },
-  { label: "Heading",    cls: "text-heading",    tag: "span", sample: "The quick brown fox jumps" },
-  { label: "Subheading", cls: "text-subheading", tag: "span", sample: "The quick brown fox jumps over the lazy dog" },
-  { label: "Body",       cls: "text-body",       tag: "span", sample: "The quick brown fox jumps over the lazy dog. Sphinx of black quartz, judge my vow." },
-  { label: "Secondary",  cls: "text-secondary",  tag: "span", sample: "The quick brown fox jumps over the lazy dog. Sphinx of black quartz, judge my vow." },
-  { label: "Caption",    cls: "text-caption",    tag: "span", sample: "The quick brown fox jumps over the lazy dog. Sphinx of black quartz, judge my vow." },
+  { label: "Display", cls: "text-display", sample: "Calm before color" },
+  { label: "Heading", cls: "text-heading", sample: "Shallow turquoise on stone" },
+  { label: "Subheading", cls: "text-subheading", sample: "Welcoming like Airbnb, precise like Polestar" },
+  { label: "Body", cls: "text-body", sample: "A cool Scandinavian canvas with one bold poetic move per view. Drenched color where it matters — never corporate grey, never widget soup." },
+  { label: "Secondary", cls: "text-secondary", sample: "Matte ceramic surfaces, geometric sans voice, one accent at a time." },
+  { label: "Caption", cls: "text-caption", sample: "Golden hour accents · meadow greens · gallery stillness" },
 ];
 ---
 
-<BaseLayout title="Design System" description="A neutral, token-driven design system showcase.">
+<BaseLayout title="Quiet Poet — Design System" activeNav="overview">
 
-  <!-- Sticky header -->
-  <header class="site-header">
-    <div class="site-header__inner">
-      <span class="site-header__wordmark">Design System</span>
-      <nav class="site-header__nav" aria-label="Page sections">
-        <a href="#colors">Colors</a>
-        <a href="#type">Type</a>
-        <a href="#components">Components</a>
-      </nav>
-    </div>
-  </header>
+  <main class="page-content">
 
-  <main class="page-main">
-
-    <!-- Hero -->
-    <div class="hero">
-      <div class="hero__inner">
-        <p class="hero__caption text-caption text-muted">Neutral Canvas</p>
-        <h1 class="text-display hero__headline">
-          Tokens first.<br />Reskin everything.
-        </h1>
-        <p class="hero__lede text-secondary text-muted">
-          A blank-slate design system. Change the tokens in <code>global.css</code>
-          and every component reskins instantly — no component code touched.
-        </p>
-        <div class="hero__actions">
-          <Button variant="primary" size="lg" href="#components">Browse components</Button>
-          <Button variant="ghost" size="lg" href="#colors">See tokens</Button>
-        </div>
+    <section class="hero" id="overview">
+      <div class="hero__badge-row">
+        <Badge tone="ocean">Turquoise</Badge>
+        <Badge tone="gold">Golden hour</Badge>
+        <Badge tone="green">Meadow</Badge>
       </div>
-    </div>
+      <h1 class="text-display hero__headline">
+        Calm canvas.<br />
+        <span class="hero__accent">Poetic color.</span>
+      </h1>
+      <p class="hero__lede text-secondary text-muted">
+        A design system built for stillness first — cool slate and ceramic surfaces,
+        with drenched turquoise and amber where it counts. Edit tokens in
+        <code>src/styles/global.css</code>; the showcase updates on save.
+      </p>
+      <div class="hero__actions">
+        <Button variant="primary" size="lg" href="#components">Browse components</Button>
+        <Button variant="secondary" size="lg" href="#colors">Copy color tokens</Button>
+      </div>
+    </section>
 
-    <div class="content-wrap">
-
-      <!-- Colors -->
-      <Section id="colors" heading="Color tokens" lede="Nine semantic color tokens cover every UI surface. Swap them and the entire system follows.">
-        <div class="swatch-grid">
-          {swatches.map((s) => (
-            <ColorSwatch name={s.name} token={s.token} />
-          ))}
-        </div>
-      </Section>
-
-      <!-- Type -->
-      <Section id="type" heading="Type scale" lede="Six steps built on clamp() and rem. Display through Caption, all token-driven.">
-        <div class="type-panel">
-          {typeRows.map((row) => (
-            <div class="type-row">
-              <span class="type-row__label text-caption text-muted">{row.label}</span>
-              <span class={`type-row__sample font-display ${row.cls}`}>{row.sample}</span>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <!-- Components -->
-      <Section id="components" heading="Components" lede="Four lanes: actions, status badges, form inputs, and content surfaces.">
-        <div class="component-lanes">
-
-          <!-- Actions -->
-          <div class="lane">
-            <p class="lane__heading">Actions</p>
-            <div class="lane__items">
-              <Button variant="primary">Primary</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button variant="primary" disabled>Disabled</Button>
-            </div>
-          </div>
-
-          <!-- Status -->
-          <div class="lane">
-            <p class="lane__heading">Status</p>
-            <div class="lane__items lane__items--wrap">
-              <Badge tone="neutral">Neutral</Badge>
-              <Badge tone="ocean">Ocean</Badge>
-              <Badge tone="gold">Gold</Badge>
-              <Badge tone="green">Green</Badge>
-              <Badge tone="coral">Coral</Badge>
-            </div>
-          </div>
-
-          <!-- Forms -->
-          <div class="lane">
-            <p class="lane__heading">Forms</p>
-            <div class="lane__items lane__items--col">
-              <Input
-                id="demo-name"
-                label="Full name"
-                type="text"
-                placeholder="Jane Smith"
-                helper="Used on your public profile."
+    <Section
+      id="colors"
+      heading="Color tokens"
+      lede="Grouped by job: neutrals hold the canvas, brand colors carry voice, signals mark status. Click Copy token to paste into your CSS."
+    >
+      {swatchGroups.map((group) => (
+        <div class="swatch-group">
+          <h3 class="swatch-group__title">{group.title}</h3>
+          <div class="swatch-grid">
+            {group.items.map((s) => (
+              <ColorSwatch
+                name={s.name}
+                token={s.token}
+                role={s.role}
+                value={s.value}
+                light={s.light}
               />
-              <Input
-                id="demo-email"
-                label="Email address"
-                type="email"
-                placeholder="jane@example.com"
-                error="That email address is already taken."
-              />
-            </div>
+            ))}
           </div>
-
-          <!-- Surfaces -->
-          <div class="lane">
-            <p class="lane__heading">Surfaces</p>
-            <div class="lane__items lane__items--col">
-              <Card title="Default card">
-                This is the default card. It uses <code>--radius-lg</code> and
-                <code>--color-line</code> for its border.
-              </Card>
-              <Card title="Compact card" compact>
-                Same component, <code>compact</code> prop reduces padding.
-              </Card>
-            </div>
-          </div>
-
         </div>
-      </Section>
+      ))}
+    </Section>
 
-      <!-- For agents -->
-      <Section heading="For agents" lede="AI tools and automated agents can consume this design system via structured endpoints.">
+    <Section
+      id="type"
+      heading="Typography"
+      lede="Onest carries the voice — geometric, calm, readable. Hierarchy comes from size and weight, not decorative display tricks."
+    >
+      <div class="type-panel">
+        {typeRows.map((row) => (
+          <div class="type-row">
+            <span class="type-row__label text-caption text-muted">{row.label}</span>
+            <span class={`type-row__sample ${row.cls}`}>{row.sample}</span>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section id="components" heading="Components" lede="Matte ceramic surfaces. Smooth motion, expressive on interaction.">
+      <div class="component-lanes">
+
+        <div class="lane">
+          <p class="lane__heading">Actions</p>
+          <div class="lane__items">
+            <Button variant="primary">Primary</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="primary" disabled>Disabled</Button>
+          </div>
+        </div>
+
+        <div class="lane">
+          <p class="lane__heading">Status</p>
+          <div class="lane__items lane__items--wrap">
+            <Badge tone="neutral">Neutral</Badge>
+            <Badge tone="ocean">Ocean</Badge>
+            <Badge tone="gold">Gold</Badge>
+            <Badge tone="green">Green</Badge>
+            <Badge tone="coral">Coral</Badge>
+          </div>
+        </div>
+
+        <div class="lane lane--wide">
+          <p class="lane__heading">Forms</p>
+          <div class="lane__items lane__items--col">
+            <Input
+              id="demo-name"
+              label="Full name"
+              type="text"
+              placeholder="Jane Smith"
+              helper="Shown on your public profile."
+            />
+            <Input
+              id="demo-email"
+              label="Email address"
+              type="email"
+              placeholder="jane@example.com"
+              helper="We only use this for account notifications."
+            />
+            <Input
+              id="demo-email-error"
+              label="Email — error example"
+              type="email"
+              placeholder="jane@example.com"
+              error="That address is already registered. Sign in instead."
+            />
+          </div>
+        </div>
+
+        <div class="lane lane--wide">
+          <p class="lane__heading">Surfaces</p>
+          <div class="lane__items lane__items--col lane__items--stretch">
+            <Card title="Ceramic card">
+              Matte surface with a soft border — the default quiet container.
+            </Card>
+            <Card title="Compact card" compact>
+              Same component with the <code>compact</code> prop for tighter padding.
+            </Card>
+          </div>
+        </div>
+
+      </div>
+    </Section>
+
+    <Section
+      id="get-started"
+      heading="Get started"
+      lede="Run the showcase locally, then edit tokens — every component on this page reskins on save."
+    >
+      <Card>
+        <ol class="get-started">
+          <li>Run <code>npm install</code> and <code>npm run dev</code> in this repo.</li>
+          <li>Edit tokens in <code>src/styles/global.css</code>.</li>
+          <li>Refresh the browser to confirm your changes.</li>
+        </ol>
+      </Card>
+    </Section>
+
+    <Section
+      id="agents"
+      heading="For agents"
+      lede="Machine-readable endpoints so AI tools stay on-brand when generating UI."
+    >
+      <Card class="agent-panel">
         <p class="agent-intro text-secondary">
-          The following machine-readable files describe the complete token set, component API,
-          and usage conventions. Point your agent at these before generating UI.
+          Point your agent at these before generating screens. Tokens, components, and rules,
+          structured for context windows.
         </p>
-        <ul class="agent-links">
-          <li>
-            <a href="/tokens.json"><code>/tokens.json</code></a>
-            — All design tokens as a flat JSON object, keyed by CSS variable name.
-          </li>
-          <li>
-            <a href="/system.md"><code>/system.md</code></a>
-            — Markdown reference: token table, component props, usage rules.
-          </li>
-          <li>
-            <a href="/llms.txt"><code>/llms.txt</code></a>
-            — Plain-text summary in the <a href="https://llmstxt.org">llms.txt</a> convention
-            for LLM context windows.
-          </li>
-        </ul>
-      </Section>
+        <div class="agent-endpoints">
+          {agentEndpoints.map((endpoint) => (
+            <AgentEndpoint
+              href={endpoint.href}
+              file={endpoint.file}
+              description={endpoint.description}
+            />
+          ))}
+        </div>
+      </Card>
+    </Section>
 
-    </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <p class="text-caption text-muted">Design System — neutral canvas, token-driven. Change tokens, reskin everything.</p>
-  </footer>
+  <script>
+    document.addEventListener("click", async (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      const btn = target.closest(".ds-swatch__copy");
+      if (!(btn instanceof HTMLButtonElement)) return;
+      const text = btn.dataset.copy;
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = "Copied";
+        btn.classList.add("is-copied");
+        window.setTimeout(() => {
+          btn.textContent = "Copy token";
+          btn.classList.remove("is-copied");
+        }, 2000);
+      } catch {
+        btn.textContent = "Copy failed";
+      }
+    });
+  </script>
 
 </BaseLayout>
 
 <style>
-  /* ── Header ── */
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: var(--z-sticky);
-    background-color: var(--color-bg);
-    border-bottom: 1px solid var(--color-line);
-  }
-
-  .site-header__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: var(--space-md) var(--space-lg);
-  }
-
-  .site-header__wordmark {
-    font-family: var(--font-display);
-    font-size: var(--text-subheading);
-    font-weight: 500;
-    color: var(--color-ink);
-    letter-spacing: -0.01em;
-  }
-
-  .site-header__nav {
-    display: flex;
-    gap: var(--space-lg);
-  }
-
-  .site-header__nav a {
-    font-size: var(--text-secondary);
-    color: var(--color-muted);
-    text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-out-quart);
-  }
-
-  .site-header__nav a:hover {
-    color: var(--color-ink);
-  }
-
-  /* ── Layout shells ── */
-  .page-main {
-    min-height: calc(100dvh - 4rem);
-  }
-
   .hero {
-    border-bottom: 1px solid var(--color-line);
-    padding: var(--space-3xl) var(--space-lg);
-  }
-
-  .hero__inner {
-    max-width: 72rem;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--space-lg);
+    padding-bottom: var(--space-2xl);
+    margin-bottom: var(--space-md);
+    border-bottom: 1px solid color-mix(in oklch, var(--color-line) 50%, transparent);
+    text-align: left;
   }
 
-  .hero__caption {
-    margin: 0;
-    max-width: none;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  .hero__badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
   }
 
   .hero__headline {
-    max-width: 18ch;
+    max-width: 14ch;
+  }
+
+  .hero__accent {
+    color: var(--color-primary-ink);
   }
 
   .hero__lede {
@@ -267,23 +291,31 @@ const typeRows = [
     align-items: center;
   }
 
-  .content-wrap {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 0 var(--space-lg);
+  .swatch-group {
+    margin-bottom: var(--space-xl);
   }
 
-  /* ── Color swatches ── */
+  .swatch-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .swatch-group__title {
+    font-size: var(--text-subheading);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin: 0 0 var(--space-md) 0;
+  }
+
   .swatch-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
     gap: var(--space-md);
   }
 
-  /* ── Type specimen ── */
   .type-panel {
     background-color: var(--color-surface);
-    border: 1px solid var(--color-line);
+    border: 1px solid color-mix(in oklch, var(--color-line) 60%, transparent);
     border-radius: var(--radius-lg);
     padding: var(--space-lg);
     display: flex;
@@ -293,37 +325,48 @@ const typeRows = [
 
   .type-row {
     display: grid;
-    grid-template-columns: 7rem 1fr;
+    grid-template-columns: 6.5rem 1fr;
     align-items: baseline;
     gap: var(--space-md);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid color-mix(in oklch, var(--color-line) 40%, transparent);
+  }
+
+  .type-row:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
   }
 
   .type-row__label {
     font-weight: 600;
-    letter-spacing: 0.04em;
   }
 
   .type-row__sample {
     color: var(--color-ink);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: 65ch;
   }
 
-  /* ── Component lanes ── */
   .component-lanes {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--space-xl);
     align-items: start;
   }
 
+  @media (max-width: 640px) {
+    .component-lanes {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .lane--wide {
+    grid-column: 1 / -1;
+  }
+
   .lane__heading {
     font-family: var(--font-body);
-    font-size: var(--text-caption);
+    font-size: var(--text-secondary);
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     color: var(--color-muted);
     margin: 0 0 var(--space-md) 0;
     max-width: none;
@@ -340,55 +383,43 @@ const typeRows = [
     flex-direction: column;
   }
 
-  .lane__items--wrap {
-    flex-wrap: wrap;
+  .lane__items--stretch {
+    align-items: stretch;
   }
 
-  /* ── Agent section ── */
-  .agent-intro {
-    margin-bottom: var(--space-md);
-    max-width: 60ch;
+  .lane__items--stretch :global(.ds-card) {
+    width: 100%;
   }
 
-  .agent-links {
+  .get-started {
     display: flex;
     flex-direction: column;
     gap: var(--space-sm);
     padding-left: var(--space-lg);
-    margin: 0;
+    margin: 0 0 var(--space-md) 0;
   }
 
-  .agent-links li {
+  .get-started li {
     font-size: var(--text-secondary);
+    color: var(--color-muted);
+    max-width: 55ch;
+  }
+
+  .agent-panel :global(.ds-card__body) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .agent-intro {
+    margin: 0;
+    max-width: 62ch;
     color: var(--color-muted);
   }
 
-  .agent-links code {
-    font-family: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
-    font-size: var(--text-caption);
-    color: var(--color-ink);
-  }
-
-  /* ── Footer ── */
-  .site-footer {
-    border-top: 1px solid var(--color-line);
-    padding: var(--space-lg);
-    text-align: center;
-  }
-
-  .site-footer p {
-    margin: 0 auto;
-    max-width: none;
-  }
-
-  /* ── code inline ── */
-  code {
-    font-family: ui-monospace, "Cascadia Code", "Source Code Pro", monospace;
-    font-size: 0.875em;
-    color: var(--color-ink);
-    background-color: var(--color-surface);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-sm);
-    padding: 0.1em 0.35em;
+  .agent-endpoints {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
   }
 </style>

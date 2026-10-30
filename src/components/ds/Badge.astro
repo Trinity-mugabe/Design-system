@@ -23,46 +23,42 @@ const classes = [
     align-items: center;
     font-family: var(--font-body);
     font-size: var(--text-caption);
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1;
-    padding: 0.2em 0.6em;
+    padding: 0.3em 0.7em;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--color-line);
+    border: 1px solid transparent;
     white-space: nowrap;
+    letter-spacing: 0.01em;
   }
 
-  /* neutral — surface + ink */
   .ds-badge--neutral {
-    background-color: var(--color-surface);
+    background-color: var(--color-badge-neutral-bg);
     color: var(--color-ink);
     border-color: var(--color-line);
   }
 
-  /* ocean — primary + bg */
   .ds-badge--ocean {
-    background-color: var(--color-primary);
-    color: var(--color-bg);
-    border-color: var(--color-primary);
+    background-color: var(--color-badge-ocean-bg);
+    color: var(--color-badge-ocean-ink);
+    border-color: color-mix(in oklch, var(--color-badge-ocean-ink) 25%, transparent);
   }
 
-  /* gold — accent bg + accent-ink text */
   .ds-badge--gold {
-    background-color: var(--color-accent);
-    color: var(--color-accent-ink);
-    border-color: var(--color-accent);
+    background-color: var(--color-badge-gold-bg);
+    color: var(--color-badge-gold-ink);
+    border-color: color-mix(in oklch, var(--color-badge-gold-ink) 25%, transparent);
   }
 
-  /* green */
   .ds-badge--green {
-    background-color: var(--color-green);
-    color: var(--color-bg);
-    border-color: var(--color-green);
+    background-color: var(--color-badge-green-bg);
+    color: var(--color-badge-green-ink);
+    border-color: color-mix(in oklch, var(--color-badge-green-ink) 25%, transparent);
   }
 
-  /* coral */
   .ds-badge--coral {
-    background-color: var(--color-coral);
-    color: var(--color-bg);
-    border-color: var(--color-coral);
+    background-color: var(--color-badge-coral-bg);
+    color: var(--color-badge-coral-ink);
+    border-color: color-mix(in oklch, var(--color-badge-coral-ink) 25%, transparent);
   }
 </style>
